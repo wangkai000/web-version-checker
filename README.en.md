@@ -1,4 +1,38 @@
-## Usage (3 common cases)
+# @wangkai000/version-update-check
+
+<div align="center">
+  <a href="./README.md" style="margin-right: 15px;">简体中文</a> | 
+  <a href="./README.en.md" style="font-weight: bold; margin-right: 15px;">English</a>
+</div>
+
+## 📦 Project Introduction
+
+A lightweight front-end version update detection and notification plugin. It can automatically monitor for new version releases of your application and notify users in a friendly way to update, ensuring users always use the latest version of your application.
+
+## ✨ Core Features
+
+- 🎯 **Automatic Update Detection**: Regularly polls to check if there's a new version of your application
+- 🔄 **Manual/Auto Modes**: Supports both automatic polling and manual triggering modes
+- 🎨 **Multiple Notification Methods**: Supports system native confirm dialog or custom notification UI
+- 📱 **Page Visibility Awareness**: Can be configured to pause detection when the page is hidden to save resources
+- ⚡ **Lightweight and Efficient**: Clean core code with no third-party dependencies
+- 🔧 **Highly Configurable**: Provides rich configuration options to meet different needs
+- 🌐 **Multi-framework Support**: Supports vanilla JavaScript, React, Vue and other frameworks
+
+## 📥 Installation
+
+```bash
+# Using npm
+npm install @wangkai000/version-update-check
+
+# Using yarn
+yarn add @wangkai000/version-update-check
+
+# Using pnpm
+pnpm add @wangkai000/version-update-check
+```
+
+## 🚀 Quick Start
 
 ### 1) Native HTML + JS (UMD)
 
@@ -190,27 +224,114 @@ if (process.env.NODE_ENV === 'production') {
   // Expose to global for component usage
   window.versionNotifier = notifier;
 }
+```
 
-// Usage example in component
-const UpdateChecker: React.FC = () => {
-  const handleCheckUpdate = async () => {
-    if (window.versionNotifier) {
-      const hasUpdate = await window.versionNotifier.checkUpdate();
-      console.log('Detection complete, has update:', hasUpdate);
-    }
-  };
-  
-  const handleCheckSilent = async () => {
-    if (window.versionNotifier) {
-      const hasUpdate = await window.versionNotifier.checkNow();
-      console.log('Silent detection complete, has update:', hasUpdate);
-    }
-  };
-  
-  return (
-    <div>
-      <button onClick={handleCheckUpdate}>Check Update and Prompt</button>
-      <button onClick={handleCheckSilent}>Silent Check Update</button>
-    </div>
-  );
+## 📚 API Documentation
+
+### UpdateNotifierOptions Configuration
+
+| Option | Type | Default | Description |
+|--------|------|--------|-------------|
+| `pollingInterval` | `number \| null` | `10000` | Polling interval in milliseconds. Set to `null` or `0` to disable auto-polling and enter manual mode |
+| `notifyType` | `'confirm' \| 'custom'` | `'confirm'` | Method to prompt users for updates. `'confirm'` uses system native dialog, `'custom'` uses custom function |
+| `onUpdate` | `() => boolean \| Promise<boolean>` | `undefined` | Custom update prompt function (used when `notifyType='custom'`), returns `true` to confirm refresh |
+| `onDetected` | `() => void` | `() => {}` | Callback function when update is detected |
+| `pauseOnHidden` | `boolean` | `true` | Whether to pause detection when page is hidden (only effective in auto-polling mode) |
+| `immediate` | `boolean` | `true` | Whether to start detection immediately (only effective in auto-polling mode) |
+| `indexPath` | `string` | `'/'` | Custom request path, defaults to root path |
+| `scriptRegex` | `RegExp` | `/<script.*src=["'](?<src>[^"']+)/gm` | Script tag regex pattern for custom matching rules |
+| `debug` | `boolean` | `false` | Whether to output logs to console |
+| `promptMessage` | `string` | `'New version detected. Click OK to refresh and update'` | Default confirm prompt message (used for `notifyType='confirm'`) |
+
+### VersionUpdateNotifier Instance Methods
+
+| Method | Return Value | Description |
+|--------|--------------|-------------|
+| `start()` | `void` | Start version update detection (only effective in auto-polling mode) |
+| `stop()` | `void` | Stop version update detection (only effective in auto-polling mode) |
+| `checkNow()` | `Promise<boolean>` | Manually trigger a silent detection, returns whether there's an update but doesn't show prompt |
+| `checkUpdate()` | `Promise<boolean>` | Manually trigger a detection, shows prompt if there's an update, returns whether there's an update |
+| `reset()` | `void` | Reset status, clear history records |
+
+### Factory Function
+
+```ts
+createUpdateNotifier(options?: UpdateNotifierOptions): VersionUpdateNotifier
+```
+
+Creates and returns a new version update notifier instance.
+
+## 🔍 Working Principle
+
+This plugin detects version updates through the following methods:
+
+1. **Script Resource Comparison**: Regularly requests the application's entry HTML file and extracts the src attributes of script tags
+2. **Change Detection**: Compares the extracted resource list with the previously saved list
+3. **Update Notification**: When changes are found in the resource list, it considers a new version to be released and notifies the user
+
+> **Tip**: For most modern front-end applications, the build process injects hash values into file names. When code changes, the generated file names also change, so version updates can be determined by detecting changes in script tag src attributes.
+
+## 🛠️ Best Practices
+
+### Enable Only in Production Environment
+
+It's recommended to enable update detection only in production environments to avoid interference during development:
+
+```ts
+// Vue + Vite
+if (import.meta.env.PROD) {
+  createUpdateNotifier(/* options */);
+}
+
+// React + Webpack
+if (process.env.NODE_ENV === 'production') {
+  createUpdateNotifier(/* options */);
+}
+```
+
+### Set Polling Interval Reasonably
+
+The polling interval should not be too short, at least 30 seconds or more to avoid excessive network requests:
+
+```ts
+const options = {
+  pollingInterval: 60000, // 1 minute
+  // other options...
 };
+```
+
+### Use Custom Notification UI
+
+For more beautiful user interfaces, you can use custom notifications:
+
+```ts
+const options = {
+  notifyType: 'custom',
+  onUpdate: async () => {
+    // Display custom notification UI
+    // For example: using Toast, Modal components
+    return await showCustomNotification(); // Return whether user confirmed update
+  }
+};
+```
+
+## 🤝 Contribution Guidelines
+
+Contributions are welcome through the following ways:
+
+1. Submit Issues to report bugs or suggest new features
+2. Fork the repository and submit Pull Requests
+3. Improve documentation and examples
+
+## 📄 License
+
+[MIT](https://github.com/wangkai000/version-update-check/blob/main/LICENSE)
+
+## 🌐 Related Links
+
+- [GitHub Repository](https://github.com/wangkai000/version-update-check)
+- [NPM Package](https://www.npmjs.com/package/@wangkai000/version-update-check)
+
+---
+
+**Thank you for using @wangkai000/version-update-check! If you have any questions, please submit an Issue on GitHub.**
