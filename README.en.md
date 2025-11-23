@@ -95,7 +95,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 );
 
 if (process.env.NODE_ENV === 'production') {
-  const options: UpdateNotifierOptions = { pollingInterval: 60000 };
+  const options: UpdateNotifierOptions = { 
+    pollingInterval: 60000,
+    notifyType: 'confirm',
+    promptMessage: 'New version found, refresh now?'
+  };
   createUpdateNotifier(options);
 }
 ```
