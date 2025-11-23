@@ -60,6 +60,7 @@ pnpm add @wangkai000/version-update-check
   </script>
 </body>
 </html>
+```
 
 ### 2) Vue + TypeScript（main.ts）
 ```ts
