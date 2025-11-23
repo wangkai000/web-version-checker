@@ -99,6 +99,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 if (process.env.NODE_ENV === 'production') {
   const options: UpdateNotifierOptions = {
     pollingInterval: 60000,
+    notifyType: 'confirm',
+    promptMessage: '发现新版本，是否立即刷新？',
     debug: false
   };
   createUpdateNotifier(options);
