@@ -1,4 +1,4 @@
-# version-update-refresh
+# version-update-check
 
 [![npm version](https://img.shields.io/npm/v/web-version-checker.svg)](https://www.npmjs.com/package/web-version-checker)
 [![license](https://img.shields.io/npm/l/web-version-checker.svg)](https://github.com/yourusername/web-version-checker/blob/main/LICENSE)
@@ -16,11 +16,11 @@ A pure front-end solution for automatic version update detection and refresh not
 
 ## Install
 ```bash
-npm install version-update-refresh
+npm install version-update-check
 # or
-yarn add version-update-refresh
+yarn add version-update-check
 # or
-pnpm add version-update-refresh
+pnpm add version-update-check
 ```
 
 ## Usage (3 common cases)
@@ -34,19 +34,19 @@ pnpm add version-update-refresh
   <title>Version Check Demo</title>
 </head>
 <body>
-  <script src="https://unpkg.com/web-version-checker/dist/index.umd.js"></script>
+  <script src="https://unpkg.com/version-update-check/dist/index.umd.js"></script>
   <script>
     // Auto polling: check every minute, with logging and callbacks
     WebVersionChecker.createUpdateNotifier({
       pollingInterval: 60000,
       debug: true,
       onDetected: () => {
-        console.log('[web-version-checker] New version detected');
+        console.log('[version-update-check] New version detected');
       },
       // Custom prompt: confirm then manually refresh (demo of location.reload)
       notifyType: 'custom',
       onUpdate: () => {
-        console.log('[web-version-checker] Ready to refresh page for update');
+        console.log('[version-update-check] Ready to refresh page for update');
         const ok = confirm('New version detected. Refresh page now to update?');
         if (ok) {
           // Manually refresh the page
@@ -66,7 +66,7 @@ pnpm add version-update-refresh
 ```ts
 import { createApp } from 'vue';
 import App from './App.vue';
-import { createUpdateNotifier, type UpdateNotifierOptions } from 'web-version-checker';
+import { createUpdateNotifier, type UpdateNotifierOptions } from 'version-update-check';
 
 createApp(App).mount('#app');
 
@@ -86,7 +86,7 @@ if (import.meta.env.PROD) {
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { createUpdateNotifier, type UpdateNotifierOptions } from 'web-version-checker';
+import { createUpdateNotifier, type UpdateNotifierOptions } from 'version-update-check';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

@@ -1,4 +1,4 @@
-# version-update-refresh
+# version-update-check
 
 [![npm version](https://img.shields.io/npm/v/web-version-checker.svg)](https://www.npmjs.com/package/web-version-checker)
 [![license](https://img.shields.io/npm/l/web-version-checker.svg)](https://github.com/yourusername/web-version-checker/blob/main/LICENSE)
@@ -16,11 +16,10 @@
 
 ## 📦 安装
 ```bash
-npm install version-update-refresh
-# 或
-yarn add version-update-refresh
-# 或
-pnpm add version-update-refresh
+npm install @wangkai000/version-update-check
+yarn add @wangkai000/version-update-check
+import { createUpdateNotifier, type UpdateNotifierOptions } from '@wangkai000/version-update-check';
+pnpm add @wangkai000/version-update-check
 ```
 
 ## 🚀 使用示例（三种常见场景）
@@ -34,19 +33,19 @@ pnpm add version-update-refresh
   <title>版本更新检测示例</title>
 </head>
 <body>
-  <script src="https://unpkg.com/web-version-checker/dist/index.umd.js"></script>
+  <script src="https://unpkg.com/@wangkai000/version-update-check/dist/index.umd.js"></script>
   <script>
     // 默认自动轮询：每分钟检测一次，并打印日志与回调
     WebVersionChecker.createUpdateNotifier({
       pollingInterval: 60000,
       debug: true,
       onDetected: () => {
-        console.log('[web-version-checker] 检测到新版本');
+        console.log('[version-update-check] 检测到新版本');
       },
       // 使用自定义提示：确认后手动刷新（演示 location.reload）
       notifyType: 'custom',
       onUpdate: () => {
-        console.log('[web-version-checker] 准备刷新页面以更新版本');
+        console.log('[version-update-check] 准备刷新页面以更新版本');
         const ok = confirm('检测到新版本，是否立即刷新页面以更新？');
         if (ok) {
           // 手动刷新页面
@@ -60,13 +59,12 @@ pnpm add version-update-refresh
   </script>
 </body>
 </html>
-```
 
 ### 2) Vue + TypeScript（main.ts）
 ```ts
 import { createApp } from 'vue';
 import App from './App.vue';
-import { createUpdateNotifier, type UpdateNotifierOptions } from 'web-version-checker';
+import { createUpdateNotifier, type UpdateNotifierOptions } from '@wangkai000/version-update-check';
 
 createApp(App).mount('#app');
 
@@ -84,20 +82,18 @@ if (import.meta.env.PROD) {
   };
   createUpdateNotifier(options);
 }
-```
 
 ### 3) React + TypeScript（index.tsx）
 ```tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { createUpdateNotifier, type UpdateNotifierOptions } from 'web-version-checker';
+import { createUpdateNotifier, type UpdateNotifierOptions } from '@wangkai000/version-update-check';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
-);
 
 if (process.env.NODE_ENV === 'production') {
   const options: UpdateNotifierOptions = {
@@ -106,7 +102,6 @@ if (process.env.NODE_ENV === 'production') {
   };
   createUpdateNotifier(options);
 }
-```
 
 ## ⚙️ 参数说明（UpdateNotifierOptions）
 
